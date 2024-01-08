@@ -1,0 +1,95 @@
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>게시글 보기</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1 th:text="${post.title}"></h1>
+            <p>작성자: <span th:text="${post.userId}"></span></p>
+            <p>작성 날짜: <span th:text="${post.postDate}"></span></p>
+            <p>수정 날짜: <span th:text="${post.updateDate}"></span></p>
+            <p>내용: <span th:text="${post.content}"></span></p>
+            <p>첨부파일: <a th:href="@{/post/{id}/file(id=${post.id})}" th:text="${post.fileName}">Download</a></p> <!-- 파일 다운로드 링크 -->
+        </div>
+
+        <div class="container">
+            <h2>댓글</h2>
+            <form>
+                <div>
+                    <label for="comment">닉네임:</label>
+                    <input id="userId" name="userId" required>
+                </div>
+                <div>
+                    <label for="comment">내용:</label>
+                    <textarea id="comment" name="comment" rows="3" required></textarea>
+                </div>
+                <div>
+                    <button id="submitComment" type="button">댓글 달기</button>
+                </div>
+
+                <h3>댓글 목록</h3>
+                <div th:each="comment : ${comments}">
+                    <div class="commentBox"> <!-- 각 댓글을 구분하는 div 추가 -->
+                        <p>댓글 작성자: <span th:text="${comment.userId}"></span></p>
+                        <p>댓글 작성 날짜: <span th:text="${comment.commentDate}"></span></p>
+                        <p>댓글 내용: <span th:text="${comment.content}"></span></p>
+                        <input type="hidden" id="comment-id" th:value="${comment.commentId}">
+                        <button class="deleteComment">댓글 삭제</button> <!-- 삭제 버튼 추가 -->
+                    </div>
+                </div>
+
+            </form>
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                $("#submitComment").click(function() {
+                    var userId = $("#userId").val();
+                    var comment = $("#comment").val();
+                    var postId = window.location.pathname.split('/').pop();
+
+                    $.ajax({
+                        url: '/comment-process',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            userId: userId,
+                            comment: comment,
+                            postId: postId
+                        }),
+                        success: function(response) {
+                            alert('댓글이 등록되었습니다.');
+                            location.reload();
+                        },
+                        error: function(error) {
+                            alert('댓글 등록 도중 오류가 발생하였습니다.');
+                        }
+                    });
+                });
+
+                $(".deleteComment").click(function() {
+                    var commentId = $(this).siblings("#comment-id").val();
+                    console.log(commentId);
+
+                    $.ajax({
+                        url: '/comment-delete/' + commentId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            alert('댓글이 삭제되었습니다.');
+                            location.reload();
+                        },
+                        error: function(error) {
+                            alert('댓글 삭제 도중 오류가 발생하였습니다.');
+                        }
+                    });
+                });
+            });
+
+        </script>
+        </div>
+    </body>
+    </html>

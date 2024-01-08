@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시판</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>게시판</h1>
+    <div id="loginStatus" th:text="${session.userId != null ? '현재 계정 : ' + session.userId : '로그인이 되어있지 않습니다.'}"></div><br>
+    <span th:if="${session.userId != null}">
+        <a href="/logout">로그아웃</a>
+        <a href="/write">글쓰기</a>
+    </span>
+    <span th:if="${session.userId == null}">
+        <a href="/login">로그인</a>
+        <a href="/register">회원가입</a>
+    </span>
+    <div>
+        <form id="searchForm">
+            <input type="text" id="searchKeyword" placeholder="게시글 제목을 입력하세요">
+            <button type="submit">검색</button>
+        </form>
+    </div>
+</header>
+<table border="1">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성 날짜</th>
+        <th>수정 날짜</th>
+        <th>관리</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 게시글 리스트 반복 영역 -->
+    <tr th:each="post : ${posts}">
+        <td th:text="${post.id}"></td>
+        <td><a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}" style="color : blue;"></a></td>
+        <td th:text="${post.userId}"></td>
+        <td th:text="${post.postDate}"></td>
+        <td th:text="${post.updateDate}"></td>
+        <td style="text-align : center;">
+            <div th:if="${session.userId != null && session.userId == post.userId}">
+                <button class="editPost" th:value="${post.id}">수정</button>
+                <button class="deletePost" th:value="${post.id}">삭제</button>
+            </div>
+            <div th:if="${session.userId == null || session.userId != post.userId}">
+                <button class="unauthorized">수정</button>
+                <button class="unauthorized">삭제</button>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- 버튼 관련 -->
+<script>
+    $(document).ready(function() {
+        $("body").on("click", ".deletePost", function() {
+            var postId = $(this).val();  // value로 게시글 ID를 가져옴
+
+            $.ajax({
+                url: '/post/' + postId,
+                type: 'DELETE',
+                success: function(response) {
+                    alert(response);
+                    location.reload();
+                },
+                error: function(error) {
+                    alert('게시글 삭제 도중 오류가 발생하였습니다.');
+                }
+            });
+        });
+
+        $("body").on("click", ".editPost", function() {
+            var postId = $(this).val();  // value로 게시글 ID를 가져옴
+            location.href = '/post/' + postId + '/edit';
+        });
+
+        $("body").on("click", ".unauthorized", function() {
+            alert('권한이 없습니다.');
+        });
+    });
+</script>
+<!-- 검색 -->
+<script th:inline="javascript">
+    $(document).ready(function() {
+        $("#searchForm").submit(function(e) {
+            /*<![CDATA[*/
+            var userId = [[${session.userId}]]; // Thymeleaf 변수를 JavaScript 변수로 전환
+            /*]]>*/
+
+            e.preventDefault();  // 기본 제출 이벤트를 막음
+
+            var keyword = $("#searchKeyword").val();  // 검색어를 가져옴
+
+            $.ajax({
+                url: '/search',
+                type: 'GET',
+                data: {
+                    keyword: keyword  // 검색어를 쿼리 파라미터로 전달
+                },
+                success: function(posts) {
+                    // 기존의 게시글을 모두 지움
+                    $("tbody").empty();
+
+                    // 검색된 게시글만 화면에 표시
+                    $.each(posts, function(index, post){
+                        var row = "<tr>";
+                        row += "<td>" + post.id + "</td>";
+                        row += "<td><a href='/post/" + post.id + "'>" + post.title + "</a></td>";
+                        row += "<td>" + post.userId + "</td>";
+                        row += "<td>" + post.postDate + "</td>";
+                        row += "<td>" + post.updateDate + "</td>";
+
+                        // 추가적인 관리 버튼 코드
+                        if(userId != null && userId == post.userId) {
+                            row += "<td style='text-align : center;'><button class='editPost' value='" + post.id + "'>수정</button><button class='deletePost' value='" + post.id + "'>삭제</button></td>";
+                        } else {
+                            row += "<td style='text-align : center;'><button class='unauthorized'>수정</button><button class='unauthorized'>삭제</button></td>";
+                        }
+
+                        row += "</tr>";
+                        $("tbody").append(row);
+                    });
+                },
+                error: function(error) {
+                    alert('검색 도중 오류가 발생하였습니다.');
+                }
+            });
+        });
+    });
+</script>
+<!-- 수정 여부 -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var message = /*[[${message}]]*/ 'null';
+    var editSuccess = /*[[${editSuccess}]]*/ false;
+    if(editSuccess && message != 'null' && message != null) {
+        alert(message);
+    }
+    /*]]>*/
+</script>
+<!-- 로그인 관련 -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var message = /*[[${message}]]*/ 'null';
+    var logSuccess = /*[[${logSuccess}]]*/ false;
+    if(logSuccess && message != 'null' && message != null) {
+        alert(message);
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

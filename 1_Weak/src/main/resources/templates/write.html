@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>글쓰기</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>글쓰기</h1>
+<form action="/write-process" method="post" enctype="multipart/form-data">
+    <div>
+        <label for="title">제목:</label>
+        <input type="text" id="title" name="title" required>
+    </div>
+    <div>
+        <label for="content">내용:</label>
+        <textarea id="content" name="content" rows="10" required></textarea>
+    </div>
+    <div>
+        <input type="hidden" id="userId" name="userId" th:value = "${session.userId}">
+    </div>
+    <div>
+        <label for="file">파일:</label>
+        <input type="file" id="file" name="file">
+    </div>
+    <div>
+        <button type="submit">글쓰기</button>
+    </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,133 @@
+/* CSS 파일: styles.css */
+* {
+    padding : 0 10px;
+}
+a {
+    color: #333;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+a:hover {
+    color: #4CAF50;
+}
+
+header {
+    background-color: #f2f2f2;
+    padding: 20px;
+    text-align: center;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+form div {
+    margin-bottom: 10px;
+}
+
+input[type=text], input[type=password], input[type=email], input[type=tel], textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+}
+
+button[type=submit]:hover {
+    background-color: #45a049;
+}
+
+/* CSS 파일: styles.css */
+
+/* 댓글 컨테이너 스타일 */
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #f4f4f4;
+}
+
+/* 댓글 제목 스타일 */
+.container h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 댓글 입력창 스타일 */
+.container textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    resize: vertical;
+}
+
+/* 댓글 버튼 스타일 */
+.container button[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+}
+
+.container button[type=submit]:hover {
+    background-color: #45a049;
+}
+
+/* 댓글 리스트 스타일 */
+.container div th:each {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.commentBox {
+    border: 1px solid #ddd; /* 경계선 추가 */
+    margin-bottom: 10px; /* 댓글 간의 여백 조정 */
+    padding: 10px; /* 댓글 내부의 여백 조정 */
+}
+
+#loginStatus {
+    color: #090;
+}
