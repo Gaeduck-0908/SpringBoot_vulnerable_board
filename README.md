@@ -1,6 +1,7 @@
 # SpringBoot_vulnerable_board
 - 스프링부트, AJAX 를 이용한 Non secure coding 과제
 - 웹서버만 Docker 이며 Oracle 서버는 localhost 입니다
+- 소요기간 : 2024.01.03 ~ 2024.01.04
 # Vulnerability
 - Parameter Modulation
 - insufficient authorization, authentication
