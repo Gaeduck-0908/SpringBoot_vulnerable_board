@@ -64,7 +64,8 @@ public class PostController {
         String fileName = null;
         if (!file.isEmpty()) {
             fileName = file.getOriginalFilename();
-            String fileLocation = new File(System.getProperty("user.home") + "/Downloads").getAbsolutePath() + File.separator + fileName;
+            // 파일 위치를 /usr/src/app/files로 변경했습니다.
+            String fileLocation = "/usr/src/app/files" + File.separator + fileName;
             try {
                 File dest = new File(fileLocation);
                 file.transferTo(dest);
@@ -82,12 +83,14 @@ public class PostController {
         return "redirect:/";
     }
 
+
     @GetMapping("/post/{id}/file")
     public ResponseEntity<Resource> serveFile(@PathVariable int id) {
 
         String fileName = jdbcTemplate.queryForObject("SELECT FILE_NAME FROM BOARD_POST WHERE ID = ?", new Object[]{id}, String.class);
 
-        String fileLocation = new File(System.getProperty("user.home") + "/Downloads").getAbsolutePath() + File.separator + fileName;
+        // 파일 위치를 /usr/src/app/files로 변경했습니다.
+        String fileLocation = "/usr/src/app/files" + File.separator + fileName;
         Path path = Paths.get(fileLocation);
         Resource resource = null;
         try {
