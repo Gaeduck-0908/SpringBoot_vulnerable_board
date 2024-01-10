@@ -50,5 +50,11 @@ CREATE TABLE BOARD_COMMENTS (
 );
 
 ```
+# Run
+```
+./gradlew build
+docker build -t [이미지명]
+docker run --name [컨테이너명] -p [포트:포트] -v [host dir]:/usr/src/app/files [이미지명]
+```
 # Screenshot
 ![image](https://github.com/Gaeduck-0908/SpringBoot_vulnerable_board/assets/82009667/0a6fc732-9de2-45c8-8e09-e07ebaaa7624)
